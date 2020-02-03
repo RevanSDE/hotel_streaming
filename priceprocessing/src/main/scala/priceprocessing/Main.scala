@@ -1,10 +1,12 @@
 package priceprocessing
 
+import org.apache.log4j.Logger
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.SparkSession
 
 
 object Main {
+  lazy val log = Logger.getLogger(getClass.getName)
 
   def main(args: Array[String]): Unit = {
     implicit val spark: SparkSession = SparkSession
@@ -15,24 +17,20 @@ object Main {
 
     import spark.implicits._
 
-    val lines = spark.readStream
-      .format("socket")
-      .option("host", "localhost")
-      .option("port", 99999)
+    val df = spark
+      .readStream
+      .format("kafka")
+      .option("kafka.bootstrap.servers", "revan-Virtual-Machine:9092")
+      .option("subscribe", "test")
       .load()
-
-    // Split the lines into words
-    val words = lines.as[String].flatMap(_.split(" "))
-
-    // Generate running word count
-    val wordCounts = words.groupBy("value").count()
-
-    val query = wordCounts.writeStream
-      .outputMode("complete")
+    val query = df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
+      .as[(String, String)]
+      .writeStream
       .format("console")
       .start()
+    df.printSchema()
 
-    query.awaitTermination()
+    query.awaitTermination(20000)
   }
 
 

@@ -1,5 +1,6 @@
 server:
   port: 8080
 kafka:
-  bootstrap: localhost:9092
+  server: revan-Virtual-Machine:9092
+  producer.id: room_producer_1
   topic: test

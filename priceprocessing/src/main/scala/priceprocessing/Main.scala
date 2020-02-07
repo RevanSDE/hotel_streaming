@@ -3,6 +3,8 @@ package priceprocessing
 import org.apache.log4j.Logger
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.Encoders
+import priceprocessing.model.Room
 
 
 object Main {
@@ -15,22 +17,28 @@ object Main {
       .appName("PriceProcessing")
       .getOrCreate()
 
+    spark.sparkContext.setLogLevel("WARN")
+
     import spark.implicits._
 
-    val df = spark
+    val kafkaDF = spark
       .readStream
       .format("kafka")
       .option("kafka.bootstrap.servers", "revan-Virtual-Machine:9092")
       .option("subscribe", "test")
       .load()
-    val query = df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
-      .as[(String, String)]
-      .writeStream
+
+    val roomWithAdjustedPriceDF = kafkaDF.select(
+      from_json(col("value").cast("string"),
+      Encoders.product[Room].schema))
+
+    roomWithAdjustedPriceDF.printSchema()
+    kafkaDF.printSchema()
+
+    val consoleStream = roomWithAdjustedPriceDF.writeStream
       .format("console")
       .start()
-    df.printSchema()
-
-    query.awaitTermination(20000)
+    consoleStream.awaitTermination(20000)
   }
 
 

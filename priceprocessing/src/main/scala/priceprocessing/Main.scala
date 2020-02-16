@@ -36,6 +36,7 @@ object Main {
       .select("j_struct.*")
       .join(ratesDF, Seq("hotelName"))
       .withColumn("totalPrice", col("price") * col("rate"))
+      .withColumn("currentTimestamp", current_timestamp())
 
     ratesDF.printSchema()
     ratesDF.show()
@@ -44,7 +45,11 @@ object Main {
     kafkaDF.printSchema()
 
     val consoleStream = roomWithAdjustedPriceDF.writeStream
-      .format("console")
+//      .format("console")
+      .format("org.apache.spark.sql.cassandra")
+      .option("spark.cassandra.connection.host", "localhost:9042")
+      .option("table", "room")
+      .option("keyspace","hotel_streaming")
       .start()
     consoleStream.awaitTermination(200000)
   }

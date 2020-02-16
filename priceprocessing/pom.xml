@@ -56,6 +56,12 @@
             <artifactId>spark-avro_${scala.short.version}</artifactId>
             <version>${avro.version}</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.datastax.spark</groupId>-->
+<!--            <artifactId>spark-cassandra-connector_${scala.short.version}</artifactId>-->
+<!--            <version>${spark.version}</version>-->
+<!--        </dependency>-->
+    <!--Tests-->
         <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_2.11</artifactId>

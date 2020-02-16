@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import rateservice.model.Rate;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 @Slf4j
@@ -13,14 +14,17 @@ public class RateService {
 
     private final List<Rate> staticRates = Collections.unmodifiableList(
             Arrays.asList(
-                    generateRandomRate("test_hotel"),
-                    generateRandomRate("test_hote2")));
+                    generateRandomRate("Marriott"),
+                    generateRandomRate("Radisson"),
+                    generateRandomRate("HolidayInn"),
+                    generateRandomRate("Sputnik"),
+                    generateRandomRate("ibis")));
 
     private Rate generateRandomRate(String hotelName) {
         Rate rate = new Rate();
-        rate.setHotelName(Optional.ofNullable(hotelName).orElse("test_hotel"));
+        rate.setHotelName(Optional.ofNullable(hotelName).orElse("unknown"));
         rate.setDate("10.01.2020");
-        rate.setRate(new Random().nextDouble());
+        rate.setRate(ThreadLocalRandom.current().nextDouble(3.0));
         return rate;
     }
 

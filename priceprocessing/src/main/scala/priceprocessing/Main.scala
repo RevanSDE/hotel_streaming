@@ -32,9 +32,10 @@ object Main {
 
     val roomWithAdjustedPriceDF = kafkaDF.select(
       from_json(col("value").cast("string"),
-      Encoders.product[Room].schema).as("j_struct"))
+        Encoders.product[Room].schema).as("j_struct"))
       .select("j_struct.*")
       .join(ratesDF, Seq("hotelName"))
+      .withColumn("totalPrice", col("price") * col("rate"))
 
     ratesDF.printSchema()
     ratesDF.show()

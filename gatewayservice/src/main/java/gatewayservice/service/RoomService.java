@@ -36,8 +36,8 @@ public class RoomService {
         Room room = new Room();
         ThreadLocalRandom random = ThreadLocalRandom.current();
         room.setHotelName(hotelNames.get(random.nextInt(0, hotelNames.size())));
-        room.setRoomName(String.valueOf(random.nextInt()));
-        room.setPrice(random.nextDouble(900.0));
+        room.setRoomName(String.valueOf(random.nextInt(1, 10000)));
+        room.setPrice(random.nextDouble(20.0,900.0));
         room.setStatus("booked");
         room.setFromDate("01.01.2020");
         room.setToDate("10.01.2020");

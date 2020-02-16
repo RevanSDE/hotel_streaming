@@ -24,7 +24,7 @@ public class RateService {
         Rate rate = new Rate();
         rate.setHotelName(Optional.ofNullable(hotelName).orElse("unknown"));
         rate.setDate("10.01.2020");
-        rate.setRate(ThreadLocalRandom.current().nextDouble(3.0));
+        rate.setRate(ThreadLocalRandom.current().nextDouble(0.3,3.0));
         return rate;
     }
 

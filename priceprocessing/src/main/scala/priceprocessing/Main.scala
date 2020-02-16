@@ -20,6 +20,8 @@ object Main {
     spark.sparkContext.setLogLevel("WARN")
 
     import spark.implicits._
+    //TODO: move it from here to reliable storage
+    val ratesDF = broadcast(spark.read.json("./rates.json"))
 
     val kafkaDF = spark
       .readStream
@@ -30,7 +32,12 @@ object Main {
 
     val roomWithAdjustedPriceDF = kafkaDF.select(
       from_json(col("value").cast("string"),
-      Encoders.product[Room].schema))
+      Encoders.product[Room].schema).as("j_struct"))
+      .select("j_struct.*")
+      .join(ratesDF, Seq("hotelName"))
+
+    ratesDF.printSchema()
+    ratesDF.show()
 
     roomWithAdjustedPriceDF.printSchema()
     kafkaDF.printSchema()
@@ -38,7 +45,7 @@ object Main {
     val consoleStream = roomWithAdjustedPriceDF.writeStream
       .format("console")
       .start()
-    consoleStream.awaitTermination(20000)
+    consoleStream.awaitTermination(200000)
   }
 
 

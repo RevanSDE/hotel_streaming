@@ -1,8 +1,8 @@
 package priceprocessing.model
 
-case class Room(hotelName: String,
-                roomName: String,
+case class Room(hotel_name: String,
+                room_name: String,
                 price: Option[Double],
                 status: String,
-                fromDate: String,
-                toDate: String)
+                from_date: String,
+                to_date: String)

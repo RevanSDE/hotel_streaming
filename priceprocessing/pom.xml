@@ -18,13 +18,21 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <scala.short.version>2.11</scala.short.version>
         <scala.full.version>2.11.12</scala.full.version>
-        <spark.version>2.4.4</spark.version>
+        <spark.version>2.4.3</spark.version>
         <snakeyaml.version>1.19</snakeyaml.version>
         <junit.version>4.12</junit.version>
         <scalatest.version>3.0.5</scalatest.version>
         <avro.version>4.0.0</avro.version>
     </properties>
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>4.1.17.Final</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.yaml</groupId>
@@ -43,6 +51,11 @@
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming_${scala.short.version}</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
             <artifactId>spark-sql-kafka-0-10_${scala.short.version}</artifactId>
             <version>${spark.version}</version>
         </dependency>
@@ -56,12 +69,12 @@
             <artifactId>spark-avro_${scala.short.version}</artifactId>
             <version>${avro.version}</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.datastax.spark</groupId>-->
-<!--            <artifactId>spark-cassandra-connector_${scala.short.version}</artifactId>-->
-<!--            <version>${spark.version}</version>-->
-<!--        </dependency>-->
-    <!--Tests-->
+        <dependency>
+            <groupId>com.datastax.spark</groupId>
+            <artifactId>spark-cassandra-connector_${scala.short.version}</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+        <!--Tests-->
         <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_2.11</artifactId>

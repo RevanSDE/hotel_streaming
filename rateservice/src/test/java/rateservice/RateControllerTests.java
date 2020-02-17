@@ -44,9 +44,9 @@ public class RateControllerTests {
                 .andExpect(content().json(
                         "[{\"hotelName\":\"test_hotel\"," +
 //                                "\"rate\":0.9857063610181757," +
-                                "\"date\":\"10.01.2020\"}," +
+                                "\"rateDate\":\"10.01.2020\"}," +
                                 "{\"hotelName\":\"test_hote2\"," +
 //                                "\"rate\":0.004633641957933143," +
-                                "\"date\":\"10.01.2020\"}]", false));
+                                "\"rateDate\":\"10.01.2020\"}]", false));
     }
 }
